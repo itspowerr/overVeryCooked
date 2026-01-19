@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEV CHAOS: CO-OP PANIC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="music/retro-game-arcade-236133.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="game-container">
+        <!-- Canvas Layer -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- UI Overlay Layer -->
+        <div id="ui-layer">
+            <div id="hud-top">
+                <div class="hud-box" id="score-box">SCORE: <span id="score-val">0</span></div>
+                <div class="hud-box" id="timer-box">DEADLINE: <span id="timer-val">00</span></div>
+                <div class="hud-box" id="combo-box">COMBO: x<span id="combo-val">1</span></div>
+            </div>
+
+            <div id="tutorial-overlay">P1: READ THE TICKET!</div>
+
+            <div id="active-ticket-hud" class="hidden">
+                <div class="ticket-header">BLOCKS NEEDED:</div>
+                <div id="ticket-reqs"></div>
+            </div>
+
+            <div id="chaos-indicator" class="hidden">
+                <span class="blink">⚠ CHAOS EVENT ⚠</span>
+                <div id="chaos-name">STACK OVERFLOW</div>
+            </div>
+
+            <div id="penalty-timer" class="hidden">
+                <span class="blink">🗑️ TRASH WRONG BLOCK!</span>
+                <div id="penalty-countdown">10</div>
+            </div>
+
+            <div id="submission-timer" class="hidden">
+                <span class="blink">⚡ P2: SUBMIT NOW!</span>
+                <div id="submission-countdown">15</div>
+            </div>
+
+            <!-- Modals -->
+            <div id="reader-modal" class="modal hidden">
+                <div class="modal-content terminal-style">
+                    <h2>TICKET #<span id="ticket-id">001</span></h2>
+                    <div class="code-block" id="ticket-question"></div>
+                    <div class="options-list" id="ticket-options-view"></div>
+                    <div class="instruction">PRESS E TO CLOSE</div>
+                </div>
+            </div>
+
+            <div id="compiler-modal" class="modal hidden">
+                <div class="modal-content terminal-style">
+                    <h2>COMPILER TERMINAL</h2>
+                    <div class="instruction">REQUIRED BLOCKS INSERTED. SELECT OUTPUT:</div>
+                    <div class="options-grid" id="compiler-options"></div>
+                    <div class="timer-display">
+                        <span id="compiler-timer-text">15</span> seconds remaining
+                    </div>
+                    <div class="timer-bar">
+                        <div class="timer-fill" id="compiler-timer-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notification" class="notification hidden">
+                <div class="notification-content">
+                    <h2 id="notification-title">SUCCESS!</h2>
+                    <p id="notification-message">+100 POINTS</p>
+                </div>
+            </div>
+
+            <div id="game-over-modal" class="modal hidden">
+                <div class="modal-content terminal-style">
+                    <h1>SYSTEM CRASHED</h1>
+                    <p>FINAL SCORE: <span id="final-score">0</span></p>
+                    <button id="restart-btn">REBOOT SYSTEM (SPACE)</button>
+                </div>
+            </div>
+
+            <div id="start-screen" class="modal">
+                <div class="modal-content terminal-style">
+                    <h1>DEV CHAOS</h1>
+                    <p>CO-OP PROGRAMMING PANIC</p>
+                    <div class="controls-info">
+                        <div class="p1-controls">
+                            <h3>PLAYER 1 (READER)</h3>
+                            <p>WASD to Move</p>
+                            <p>E to Interact</p>
+                        </div>
+                        <div class="p2-controls">
+                            <h3>PLAYER 2 (COMPILER)</h3>
+                            <p>ARROWS to Move</p>
+                            <p>ENTER to Interact</p>
+                        </div>
+                    </div>
+                    <button id="start-btn">INITIALIZE (SPACE)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/data.js"></script>
+    <script src="src/entities.js"></script>
+    <script src="src/renderer.js"></script>
+    <script src="src/game.js"></script>
+    <script src="src/main.js"></script>
+</body>
+
+</html>

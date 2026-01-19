@@ -1,0 +1,382 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --bg-color: #1a1a1a;
+    --term-green: #4af626;
+    --term-bg: #000;
+    --border-color: #333;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    font-family: 'VT323', monospace;
+    overflow: hidden;
+    color: var(--term-green);
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    background-color: #2b2b2b;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    image-rendering: pixelated;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass through to canvas if needed, though we use modal buttons */
+}
+
+/* HUD */
+#hud-top {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+}
+
+.hud-box {
+    background: #000;
+    border: 2px solid var(--term-green);
+    padding: 5px 15px;
+    font-size: 24px;
+    box-shadow: 0 0 10px var(--term-green);
+}
+
+#active-ticket-hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #ffff00;
+    padding: 15px;
+    color: #fff;
+    min-width: 200px;
+    font-size: 20px;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+}
+
+#tutorial-overlay {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    color: #ffff00;
+    font-size: 20px;
+    text-shadow: 2px 2px #000;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 15px 20px;
+    border-radius: 10px;
+    pointer-events: none;
+    text-align: left;
+    border: 2px solid #ffff00;
+    max-width: 300px;
+    line-height: 1.5;
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+}
+
+.ticket-header {
+    border-bottom: 2px solid #ffff00;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+    color: #ffff00;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#chaos-indicator {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff0000;
+    background: #000;
+    border: 2px solid #ff0000;
+    padding: 5px 20px;
+    text-align: center;
+    font-size: 28px;
+    text-shadow: 0 0 5px #ff0000;
+}
+
+#penalty-timer {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff0000;
+    background: #000;
+    border: 3px solid #ff0000;
+    padding: 10px 30px;
+    text-align: center;
+    font-size: 32px;
+    text-shadow: 0 0 10px #ff0000;
+    box-shadow: 0 0 20px #ff0000;
+}
+
+#penalty-countdown {
+    font-size: 48px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#submission-timer {
+    position: absolute;
+    top: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffff00;
+    background: #000;
+    border: 3px solid #ffff00;
+    padding: 10px 30px;
+    text-align: center;
+    font-size: 32px;
+    text-shadow: 0 0 10px #ffff00;
+    box-shadow: 0 0 20px #ffff00;
+}
+
+#submission-countdown {
+    font-size: 48px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.blink {
+    animation: blinker 0.5s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Modals */
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    z-index: 100;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    background: #000;
+    border: 4px double var(--term-green);
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 30px var(--term-green);
+}
+
+.terminal-style h1,
+.terminal-style h2 {
+    margin-top: 0;
+    text-decoration: underline;
+}
+
+.code-block {
+    background: #111;
+    border: 1px solid #444;
+    padding: 15px;
+    text-align: left;
+    font-family: monospace;
+    margin: 20px 0;
+    white-space: pre-wrap;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.options-list {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.timer-display {
+    text-align: center;
+    font-size: 28px;
+    margin: 20px 0 10px 0;
+    color: #0f0;
+    font-weight: bold;
+}
+
+.timer-display.warning {
+    color: #ff0;
+    animation: pulse 0.5s infinite;
+}
+
+.timer-display.danger {
+    color: #f00;
+    animation: pulse 0.3s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.option-item {
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #333;
+}
+
+button {
+    background: #000;
+    color: var(--term-green);
+    border: 2px solid var(--term-green);
+    padding: 10px 30px;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background: var(--term-green);
+    color: #000;
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 200;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.notification.show {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.notification-content {
+    background: rgba(0, 0, 0, 0.95);
+    border: 4px solid var(--term-green);
+    padding: 40px 60px;
+    text-align: center;
+    box-shadow: 0 0 50px var(--term-green);
+}
+
+.notification-content.success {
+    border-color: #0f0;
+    box-shadow: 0 0 50px #0f0;
+}
+
+.notification-content.success h2 {
+    color: #0f0;
+    text-shadow: 0 0 20px #0f0;
+}
+
+.notification-content.error {
+    border-color: #f00;
+    box-shadow: 0 0 50px #f00;
+}
+
+.notification-content.error h2 {
+    color: #f00;
+    text-shadow: 0 0 20px #f00;
+}
+
+.feedback.correct {
+    color: #0f0;
+    text-shadow: 0 0 20px #0f0;
+}
+
+.feedback.wrong {
+    color: #f00;
+    text-shadow: 0 0 20px #f00;
+}
+
+#notification-title {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+#notification-message {
+    font-size: 2rem;
+    margin: 0;
+}
+
+/* Timer Bar */
+.timer-bar {
+    width: 100%;
+    height: 15px;
+    background: #333;
+    margin-top: 15px;
+    position: relative;
+    border: 2px solid #555;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0f0, #ff0, #f00);
+    width: 100%;
+    transform-origin: left;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.controls-info {
+    display: flex;
+    justify-content: space-around;
+    margin: 30px 0;
+    gap: 20px;
+}
+
+.p1-controls {
+    color: #00ffff;
+}
+
+.p2-controls {
+    color: #ff00ff;
+}
+
+/* In-World Elements (if we need DOM overlays for players later, but we use Canvas) */
